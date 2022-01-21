@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Android_Note</string>
+    <string name="btn_save">保存</string>
+</resources>
