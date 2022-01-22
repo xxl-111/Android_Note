@@ -3,7 +3,6 @@ package com.example.android_note;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.Sampler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,11 +14,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.android_note.DB.DataBase_Manage;
 
 public class EditableActivity extends AppCompatActivity {
-
+    Intent intent=null;
+    private String mode= String.valueOf(0);
+    private Notes notes=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editable_activity);
+        intent=getIntent();
+        if(intent!=null){
+            mode= intent.getStringExtra("mode");
+            notes=new Notes(Long.valueOf(intent.getStringExtra("id")),
+                    intent.getStringExtra("content"),
+                    intent.getStringExtra("time"),
+                    intent.getStringExtra("title"),
+                    Integer.valueOf(intent.getStringExtra("tag")));
+            EditText title=findViewById(R.id.title_new);
+            title.setText(notes.getTitle());
+            EditText context=findViewById(R.id.context_new);
+            context.setText(notes.getContent());
+            EditText tag=findViewById(R.id.tag_new);
+            tag.setText(String.valueOf(notes.getTag()));
+
+        }
+
+
+
 
         Button btn_bacck=findViewById(R.id.button_back);
         btn_bacck.setOnClickListener(new View.OnClickListener() {
@@ -43,7 +63,11 @@ public class EditableActivity extends AppCompatActivity {
                     }
                     DataBase_Manage dataBase_manage = new DataBase_Manage(EditableActivity.this);
                     dataBase_manage.db_open_write();
-                    dataBase_manage.db_insert(title.getText().toString(), context.getText().toString(), Integer.valueOf( tag.getText().toString()));
+                    if(mode.equals("3")){
+                        dataBase_manage.db_update(notes.getId(),title.getText().toString(), context.getText().toString(), Integer.valueOf(tag.getText().toString()));
+                    }else {
+                        dataBase_manage.db_insert(title.getText().toString(), context.getText().toString(), Integer.valueOf(tag.getText().toString()));
+                    }
                     dataBase_manage.db_close();
                     startActivity(new Intent(EditableActivity.this, MainActivity.class));
                 }else {
@@ -74,7 +98,11 @@ public class EditableActivity extends AppCompatActivity {
                     }
                     DataBase_Manage dataBase_manage = new DataBase_Manage(EditableActivity.this);
                     dataBase_manage.db_open_write();
-                    dataBase_manage.db_insert(title.getText().toString(), context.getText().toString(), Integer.valueOf( tag.getText().toString()));
+                    if(mode.equals("3")){
+                        dataBase_manage.db_update(notes.getId(),title.getText().toString(), context.getText().toString(), Integer.valueOf(tag.getText().toString()));
+                    }else {
+                        dataBase_manage.db_insert(title.getText().toString(), context.getText().toString(), Integer.valueOf(tag.getText().toString()));
+                    }
                     dataBase_manage.db_close();
                     startActivity(new Intent(EditableActivity.this, MainActivity.class));
                 }else {

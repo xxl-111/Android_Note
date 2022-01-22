@@ -2,18 +2,12 @@ package com.example.android_note.DB;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.database.*;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.icu.text.SimpleDateFormat;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.example.android_note.MainActivity;
 
 import java.sql.Date;
-import java.text.DateFormat;
 
 public class DataBase_Manage {
     private Context mycontext = null;
@@ -103,7 +97,7 @@ public class DataBase_Manage {
     }
 
     //修改
-    public int db_update(int _id, String title, String content, int tag) {
+    public int db_update(long _id, String title, String content, int tag) {
         int result = 0;
 
         try {

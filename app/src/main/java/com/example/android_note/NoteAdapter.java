@@ -1,10 +1,10 @@
 package com.example.android_note;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.prefs.PreferenceChangeEvent;
 
 public class NoteAdapter extends BaseAdapter implements Filterable {
 
@@ -47,17 +46,21 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
     public View getView(int position, View convertView, ViewGroup parent){
         SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(mContext);
         mContext.setTheme(R.style.DayTheme);//设置Context的主体风格
-        @SuppressLint("ViewHolder")
-        View v=View.inflate(mContext,R.layout.note_layout,null);//初始化View，需要用到inflate，对其设置布局格式
-        TextView tvContent=(TextView)v.findViewById(R.id.tv_content);//TextView类型，用来锁定res目录下的tv_content，找到其设置格式
-        TextView tv_time=(TextView)v.findViewById(R.id.tv_time);//TextView类型，用来锁定time格式
-        String allText=noteList.get(position).getContent();//初始化allText，目的用来获取所有的笔记数目
+
+        LayoutInflater inflater=LayoutInflater.from(mContext);
+        convertView=inflater.inflate(R.layout.note_layout,parent,false);
+       // convertView=View.inflate(mContext,R.layout.note_layout,null);//初始化View，需要用到inflate，对其设置布局格式
+
+
+        TextView tvContent=(TextView)convertView.findViewById(R.id.tv_content);//TextView类型，用来锁定res目录下的tv_content，找到其设置格式
+        TextView tv_time=(TextView)convertView.findViewById(R.id.tv_time);//TextView类型，用来锁定time格式
+        String allText=noteList.get(position).getTitle();//初始化allText，目的用来获取所有的笔记数目
 
         tvContent.setText(allText);//将获取的字符串集合应用到内容栏中
         tv_time.setText(noteList.get(position).getTime());//将获取的时间字符串应用到时间栏中
         //save note id to tag
-        v.setTag(noteList.get(position).getTag());//设置笔记类型
-        return v;//以View类型返回
+        //convertView.setTag(noteList.get(position).getTag());//设置笔记类型
+        return convertView;//以View类型返回
     }
     @Override//必须重写的函数，文件过滤器，筛选所需内容并且能够排序
     public Filter getFilter(){//该函数目的获取实例化对象的过滤器对象
